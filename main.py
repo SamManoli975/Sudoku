@@ -5,20 +5,24 @@ pg.init()
 size = (750, 750)  # Width, Height
 screen = pg.display.set_mode(size)
 font = pg.font.SysFont('none', 80)
-pg.display.set_caption("My Pygame Window")
+font2 = pg.font.SysFont('none', 50)
+pg.display.set_caption("My pygame Window")
+screen.fill((255,255,255))
 
 x=0
 y=0
-diff = 750 / 9
+val = 0
+diff = 720 / 9#this is a test change to commitsss
+
 
 number_grid = [
     [0, 0, 0, 0, 0, 9, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 7, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 4, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 2, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
 
@@ -26,44 +30,53 @@ number_grid = [
 ]
 
 
+def draw():
+    
+    for i in range(0,10):#looping through from 0-9
+        line_width = 10 if i%3 == 0 else 3#changing line width to clearly show the 9 squares 
+        #drawing lines
+        pg.draw.line(screen,(0,0,0), ((80*i)+15,15),((80*i)+15,735),line_width)
+        pg.draw.line(screen,(0,0,0), (15,(80*i)+15),(735,(80*i)+15),line_width)
+
+        # pg.draw.lines(screen, (255,255,255), False, (80,0),(80,720), 3)
+
+
 
 def get_cord(pos):
        global x
-       x = pos[0]//diff
+       x = (pos[0]-15)//diff
        global y
-       y = pos[1]//diff
+       y = (pos[1]-15)//diff
 
 def clickBox():  
+    draw()
     print('yeah')
     # click = pg.mouse.get_pressed()
     if pg.mouse.get_pressed()[0]:  # Check if the left mouse button is pressed
         print('clicked')
-        # screen.fill((0,0,0))
-        pg.draw.line(screen, (255, 0, 0), (500, 500), (100, 0), 20)
-        
-            
-
-            
         print(pg.mouse.get_pos())
+        for i in range(2): #(x * diff)+15, (y * diff)+15, diff, diff
+            pg.draw.line(screen, (255, 0, 0), ((x * diff - 1) + 15, (y + i) * diff + 15), (x * diff + diff + 1 + 15, (y + i) * diff + 15), 3)
+            pg.draw.line(screen, (255, 0, 0), ((x + i) * diff + 15, y * diff + 15), ((x + i) * diff + 15, y * diff + diff + 15), 3)
+    
+            # screen.fill((0,0,0))
+            
+            
+                
+
+                
+           
         # if pos[0] in range(0,80) and pos[1] in range(0,80):
             
-        #     pg.draw.line(screen, (255, 0, 0), (50 * diff-3, (50 + 1)*diff), (50 * diff + diff + 3, (50 + 1)*diff), 7)
-        #     pg.draw.line(screen, (255, 0, 0), ( (50 + 1)* diff, 50* diff ), ((50 + 1) * diff, 50 * diff + diff), 7)
+        #     
         # elif pos[0] in range(80,160) and pos[1] in range(0,80):
         #     print("Box 2 clicked")
 
 
 
-def draw():
-    screen.fill((0,0,0))
-    for i in range(0,10):#looping through from 0-9
-        line_width = 10 if i%3 == 0 else 3#changing line width to clearly show the 9 squares 
-        #drawing lines
-        pg.draw.line(screen,(255,255,255), ((80*i)+15,15),((80*i)+15,735),line_width)
-        pg.draw.line(screen,(255,255,255), (15,(80*i)+15),(735,(80*i)+15),line_width)
 
-        # pg.draw.lines(screen, (255,255,255), False, (80,0),(80,720), 3)
         
+draw()
 def draw_numbers():
     row = 0
     offset = 35
@@ -72,16 +85,30 @@ def draw_numbers():
         col = 0
         while col < 9:
             number = number_grid[row][col]
-            # text_rect = text.get_rect()
-            text = font.render(str(number), True, (255,255,255))
-            # text_rect.center = ((col*80)+40, (row*80)+40)
-            screen.blit(text, ((col*80) + offset+5, (row*80) + offset-2))
+            if number != 0 :
+
+                # text_rect = text.get_rect()
+                text = font.render(str(number), True, (0,0,0))
+                # text_rect.center = ((col*80)+40, (row*80)+40)
+                screen.blit(text, ((col*80) + offset+5, (row*80) + offset-2))
             
             col +=1
         row +=1
 
+#function to enter a value
+def draw_val(val):
+    # if number_grid[x][y] == 0:
+    #     print('yes')
+    # else:
+    #     print('iidk what ur talking about')
+    pg.draw.rect(screen, (255,255,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
+
+    text1 = font2.render(str(val), 1, (0, 0, 255))
+    screen.blit(text1, (x * diff+40, y * diff+40))
 
 
+
+# mouse_clicked = False
 run = True
 while run == True:
     for event in pg.event.get():  
@@ -92,15 +119,56 @@ while run == True:
         if event.type == pg.MOUSEBUTTONDOWN:
             pos = pg.mouse.get_pos()
             get_cord(pg.mouse.get_pos())
+            # mouse_clicked = True
             clickBox()
-
+            pg.display.flip()
+            pg.time.delay(50)
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_LEFT:
+                x-= 1
+                flag1 = 1
+            if event.key == pg.K_RIGHT:
+                x+= 1
+                flag1 = 1
+            if event.key == pg.K_UP:
+                y-= 1
+                flag1 = 1
+            if event.key == pg.K_DOWN:
+                y+= 1
+                flag1 = 1
+            if event.key == pg.K_1:
+                val = 1
+            if event.key == pg.K_2:
+                val = 2
+            if event.key == pg.K_3:
+                val = 3
+            if event.key == pg.K_4:
+                val = 4
+            if event.key == pg.K_5:
+                val = 5
+            if event.key == pg.K_6:
+                val = 6
+            if event.key == pg.K_7:
+                val = 7
+            if event.key == pg.K_8:
+                val = 8
+            if event.key == pg.K_9:
+                val = 9
             
+    
+            if val != 0:
+                
+                draw_val(val)
+                
+                pg.display.flip()
+                val = 0
+                pg.time.delay(50)
+                mouse_clicked = False
 
-    get_cord(pg.mouse.get_pos())
+    
 
-    draw()
-    draw_numbers()
-    # clickBox(pg.mouse.get_pos())
+    
+    draw_numbers()#this is the function to draw the numbers he
     pg.display.flip()
 
 
