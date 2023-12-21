@@ -28,7 +28,12 @@ number_grid = [
 
     
 ]
-
+target_number = 9
+for row_index, row in enumerate(number_grid):
+    for col_index, number in enumerate(row):
+        if number == target_number:
+            print(f"Number {target_number} found at row {row_index + 1}, column {col_index + 1}")
+print(number_grid[0][5])
 
 def draw():
     
@@ -97,14 +102,20 @@ def draw_numbers():
 
 #function to enter a value
 def draw_val(val):
-    # if number_grid[x][y] == 0:
-    #     print('yes')
-    # else:
-    #     print('iidk what ur talking about')
-    pg.draw.rect(screen, (255,255,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
+    grid_x = int(x)
+    grid_y = int(y)
+    # print('these are the grid coords',grid_x,grid_y)
+    #debugging
+    # grid_x = int(x // diff)
+    # grid_y = int(y // diff)
+    # print('the number in this cell is ',number_grid[grid_y][grid_x])
+    # print(grid_y,grid_x)
+    if number_grid[grid_y][grid_x] == 0:
+        print('this square is empty')
+        pg.draw.rect(screen, (255,255,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
 
-    text1 = font2.render(str(val), 1, (0, 0, 255))
-    screen.blit(text1, (x * diff+40, y * diff+40))
+        text1 = font2.render(str(val), 1, (0, 0, 255))
+        screen.blit(text1, (x * diff+40, y * diff+40))
 
 
 
@@ -157,7 +168,7 @@ while run == True:
             
     
             if val != 0:
-                
+                # get_cord(pg.mouse.get_pos())
                 draw_val(val)
                 
                 pg.display.flip()
