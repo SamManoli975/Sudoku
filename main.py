@@ -16,24 +16,26 @@ diff = 720 / 9#this is a test change to commitsss
 
 
 number_grid = [
-    [0, 0, 0, 0, 0, 9, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 7, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 4, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 2, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-
-    
+    [0, 0, 0, 5, 0, 0, 8, 0, 0],
+    [0, 2, 9, 0, 7, 4, 0, 3, 0],
+    [3, 1, 0, 0, 9, 0, 0, 4, 6],
+    [7, 5, 1, 0, 0, 3, 0, 0, 4],
+    [2, 0, 0, 0, 0, 0, 0, 0, 9],
+    [4, 0, 0, 7, 0, 0, 3, 1, 8],
+    [1, 8, 0, 0, 2, 0, 0, 6, 7],
+    [0, 6, 0, 8, 1, 0, 4, 5, 0],
+    [0, 0, 7, 0, 0, 9, 0, 0, 0],
 ]
-target_number = 9
-for row_index, row in enumerate(number_grid):
-    for col_index, number in enumerate(row):
-        if number == target_number:
-            print(f"Number {target_number} found at row {row_index + 1}, column {col_index + 1}")
-print(number_grid[0][5])
+
+solve_number_grid = [row[:] for row in number_grid]
+# solve_number_grid = number_grid[:]
+# print(solve_number_grid)
+# target_number = 9
+# for row_index, row in enumerate(number_grid):
+#     for col_index, number in enumerate(row):
+#         if number == target_number:
+#             print(f"Number {target_number} found at row {row_index + 1}, column {col_index + 1}")
+# print(number_grid[0][5])
 
 def draw():
     
@@ -117,9 +119,38 @@ def draw_val(val):
         text1 = font2.render(str(val), 1, (0, 0, 255))
         screen.blit(text1, (x * diff+40, y * diff+40))
 
+#function to check if the value works for the sudoky board,
+#so that there is not the same number in the 3x3 square or in the row or column
+def valid(grid, y, x, val):
+    x = int(x)
+    y = int(y)
+
+    # Check row
+    row = grid[x]
+    if val in row:
+        return False
+
+    # Check column
+    col = [grid[i][y] for i in range(9)]
+    if val in col:
+        return False
+
+    # Check 3x3 box
+    box_x = x // 3 * 3
+    box_y = y // 3 * 3
+    for i in range(box_x, box_x + 3):
+        for j in range(box_y, box_y + 3):
+            if grid[i][j] == val:
+                return False
+
+    # Return True if the number is valid, False if it isn't
+    return True
+
+
 
 
 # mouse_clicked = False
+validNum = False
 run = True
 while run == True:
     for event in pg.event.get():  
@@ -169,12 +200,19 @@ while run == True:
     
             if val != 0:
                 # get_cord(pg.mouse.get_pos())
-                draw_val(val)
                 
-                pg.display.flip()
+                
+                if valid(solve_number_grid,x,y,val) == True:
+                    solve_number_grid[int(y)][int(x)] = val
+                    validNum = True
+                    print('it works')
+                if validNum == True:
+                    draw_val(val)
+                    validNum = False
+                # pg.display.flip()
                 val = 0
-                pg.time.delay(50)
-                mouse_clicked = False
+                # pg.time.delay(50)
+                # mouse_clicked = False
 
     
 
