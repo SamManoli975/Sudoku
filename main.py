@@ -16,16 +16,25 @@ diff = 720 / 9#this is a test change to commitsss
 
 
 number_grid = [
-    [0, 0, 0, 5, 0, 0, 8, 0, 0],
-    [0, 2, 9, 0, 7, 4, 0, 3, 0],
-    [3, 1, 0, 0, 9, 0, 0, 4, 6],
-    [7, 5, 1, 0, 0, 3, 0, 0, 4],
-    [2, 0, 0, 0, 0, 0, 0, 0, 9],
-    [4, 0, 0, 7, 0, 0, 3, 1, 8],
-    [1, 8, 0, 0, 2, 0, 0, 6, 7],
-    [0, 6, 0, 8, 1, 0, 4, 5, 0],
-    [0, 0, 7, 0, 0, 9, 0, 0, 0],
+    [6, 7, 4, 5, 3, 1, 8, 9, 2],
+    [8, 2, 9, 6, 7, 4, 1, 3, 5],
+    [3, 1, 5, 2, 9, 8, 7, 4, 6],
+    [7, 5, 1, 0, 0, 3, 6, 2, 4],
+    [2, 3, 8, 0, 0, 6, 5, 7, 9],
+    [4, 9, 6, 7, 0, 2, 3, 1, 8],
+    [1, 8, 3, 0, 2, 5, 9, 6, 7],
+    [9, 6, 2, 8, 1, 0, 4, 5, 3],
+    [5, 4, 7, 0, 0, 9, 2, 8, 1],
 ]
+    # [0, 0, 0, 5, 0, 0, 8, 0, 0],
+    # [0, 2, 9, 0, 7, 4, 0, 3, 0],
+    # [3, 1, 0, 0, 9, 0, 0, 4, 6],
+    # [7, 5, 1, 0, 0, 3, 0, 0, 4],
+    # [2, 0, 0, 0, 0, 0, 0, 0, 9],
+    # [4, 0, 0, 7, 0, 0, 3, 1, 8],
+    # [1, 8, 0, 0, 2, 0, 0, 6, 7],
+    # [0, 6, 0, 8, 1, 0, 4, 5, 0],
+    # [0, 0, 7, 0, 0, 9, 0, 0, 0],
 
 solve_number_grid = [row[:] for row in number_grid]
 # solve_number_grid = number_grid[:]
@@ -55,22 +64,94 @@ def get_cord(pos):
        global y
        y = (pos[1]-15)//diff
 
-def clickBox():  
+def clickBox(x, y):
     draw()
-    # print('yeah')
-    # click = pg.mouse.get_pressed()
-    if pg.mouse.get_pressed()[0]:  # Check if the left mouse button is pressed
-        # print('clicked')
-        print(pg.mouse.get_pos())
-        for i in range(2): #(x * diff)+15, (y * diff)+15, diff, diff
+
+    # Check if the left mouse button is pressed
+    mouse_clicked = pg.mouse.get_pressed()[0]
+    
+    # Check if the mouse click occurred within the current box
+    mouse_pos = pg.mouse.get_pos()
+    if (15 + x * diff) <= mouse_pos[0] <= (15 + (x + 1) * diff) and (15 + y * diff) <= mouse_pos[1] <= (15 + (y + 1) * diff):
+        highlight_box(x, y, mouse_clicked)
+
+    # If called from arrow key press, highlight the box in the specified direction
+    else:
+        if pg.key.get_pressed()[pg.K_LEFT]:
+            highlight_box(x, y, False)
+        elif pg.key.get_pressed()[pg.K_RIGHT]:
+            highlight_box(x, y, False)
+        elif pg.key.get_pressed()[pg.K_UP]:
+            highlight_box(x, y, False)
+        elif pg.key.get_pressed()[pg.K_DOWN]:
+            highlight_box(x, y, False)
+
+def highlight_box(x, y, mouse_clicked):
+    if mouse_clicked:
+        for i in range(2):
             pg.draw.line(screen, (255, 0, 0), ((x * diff - 1) + 15, (y + i) * diff + 15), (x * diff + diff + 1 + 15, (y + i) * diff + 15), 3)
             pg.draw.line(screen, (255, 0, 0), ((x + i) * diff + 15, y * diff + 15), ((x + i) * diff + 15, y * diff + diff + 15), 3)
-    
-            # screen.fill((0,0,0))
-            
-            
-                
+        print(f'Clicked on box ({x}, {y})')
+    else:
+        for i in range(2):
+            pg.draw.line(screen, (255, 0, 0), ((x * diff - 1) + 15, (y + i) * diff + 15), (x * diff + diff + 1 + 15, (y + i) * diff + 15), 3)
+            pg.draw.line(screen, (255, 0, 0), ((x + i) * diff + 15, y * diff + 15), ((x + i) * diff + 15, y * diff + diff + 15), 3)
 
+
+
+#function to check if board is complete
+def checkFinish(grid,i,j):
+    while grid[i][j]!= 0:
+        if i<8:
+            i+= 1
+        elif i == 8 and j<8:
+            i = 0
+            j+= 1
+        elif i == 8 and j == 8:
+            return True
+    return False
+    # pg.event.pump()
+    # for it in range(1, 10):
+    #     if valid(grid, i, j, it)== True:
+    #             grid[i][j]= it
+    #             global x, y
+    #             x = i
+    #             y = j
+    #             # white color background
+    #             screen.fill((255, 255, 255))
+    #             draw()
+    #             clickBox()
+    #             pg.display.update()
+    #             pg.time.delay(20)
+    #             if solve(grid, i, j)== 1:
+    #                 return True
+    #             else:
+    #                 grid[i][j]= 0
+    #             # white color background\
+    #             screen.fill((255, 255, 255))
+
+    #             draw()
+    #             clickBox()
+    #             pg.display.update()
+    #             pg.time.delay(50)
+    # return False
+
+                
+def result():
+    text_congratulations = font.render("CONGRATULATIONS YOU", 1, (0, 0, 255))
+
+    # Render the second line
+    text_won = font.render("WON", 1, (0, 0, 255))
+
+    # Blit the first line onto the screen
+    screen.blit(text_congratulations, (20, 500))
+
+    # Calculate the position for the second line (under the first line)
+    text_won_x = 300
+    text_won_y = 500 + text_congratulations.get_height() + 5  # Adjust the vertical spacing as needed
+
+    # Blit the second line onto the screen
+    screen.blit(text_won, (text_won_x, text_won_y))
                 
            
         # if pos[0] in range(0,80) and pos[1] in range(0,80):
@@ -151,6 +232,7 @@ def valid(grid, y, x, val):
 
 
 # mouse_clicked = False
+res = 0
 validNum = False
 run = True
 while run == True:
@@ -163,39 +245,44 @@ while run == True:
             pos = pg.mouse.get_pos()
             get_cord(pg.mouse.get_pos())
             # mouse_clicked = True
-            clickBox()
+            clickBox(x,y)
             pg.display.flip()
             pg.time.delay(50)
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_LEFT:
                 x-= 1
-                flag1 = 1
+                clickBox(x,y)
+                
             if event.key == pg.K_RIGHT:
                 x+= 1
-                flag1 = 1
+                clickBox(x,y)
+                
             if event.key == pg.K_UP:
                 y-= 1
-                flag1 = 1
+                clickBox(x,y)
+                
             if event.key == pg.K_DOWN:
                 y+= 1
-                flag1 = 1
-            if event.key == pg.K_1:
+                clickBox(x,y)
+                
+                
+            if event.key == pg.K_1 or event.key == pg.K_KP1:
                 val = 1
-            if event.key == pg.K_2:
+            if event.key == pg.K_2 or event.key == pg.K_KP2:
                 val = 2
-            if event.key == pg.K_3:
+            if event.key == pg.K_3 or event.key == pg.K_KP3:
                 val = 3
-            if event.key == pg.K_4:
+            if event.key == pg.K_4 or event.key == pg.K_KP4:
                 val = 4
-            if event.key == pg.K_5:
+            if event.key == pg.K_5 or event.key == pg.K_KP5:
                 val = 5
-            if event.key == pg.K_6:
+            if event.key == pg.K_6 or event.key == pg.K_KP6:
                 val = 6
-            if event.key == pg.K_7:
+            if event.key == pg.K_7 or event.key == pg.K_KP7:
                 val = 7
-            if event.key == pg.K_8:
+            if event.key == pg.K_8 or event.key == pg.K_KP8:
                 val = 8
-            if event.key == pg.K_9:
+            if event.key == pg.K_9 or event.key == pg.K_KP9:
                 val = 9
             if event.key == pg.K_BACKSPACE:
                 # Reset number
@@ -204,35 +291,39 @@ while run == True:
                 # Clear input box
                 pg.draw.rect(screen, (255,255,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
             
-    
-            if val != 0:
-                # get_cord(pg.mouse.get_pos())
-                
-                if valid(solve_number_grid,x,y,val) == 'duplicate':
-                    print('dupe')
-                    validNum = True
-                elif valid(solve_number_grid,x,y,val) == True:
-                    solve_number_grid[int(y)][int(x)] = val
-                    pg.draw.rect(screen, (0,0,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
-                    pg.display.flip()
-                    pg.time.delay(100)
-                    pg.draw.rect(screen, (255,255,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
-                    validNum = True
-                    print('it works')
-                if validNum == False:
-                    pg.draw.rect(screen, (255,0,0), ((x * diff+3)+15, (y * diff+3)+15, diff-7, diff-7))
-                    pg.display.flip()
-                    pg.time.delay(100)
-                    pg.draw.rect(screen, (255,255,255), ((x * diff+3)+15, (y * diff+3)+15, diff-7, diff-7))
-                elif validNum == True:
-                    draw_val(val)
-                    validNum = False
-                
-                # pg.display.flip()
-                
-                val = 0
-                # pg.time.delay(50)
-                # mouse_clicked = False
+        
+        if val != 0:
+            # get_cord(pg.mouse.get_pos())
+            
+            if valid(solve_number_grid,x,y,val) == 'duplicate':
+                print('dupe')
+                validNum = True
+            elif valid(solve_number_grid,x,y,val) == True:
+                solve_number_grid[int(y)][int(x)] = val
+                pg.draw.rect(screen, (0,0,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
+                pg.display.flip()
+                pg.time.delay(100)
+                pg.draw.rect(screen, (255,255,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
+                validNum = True
+                print('it works')
+            if validNum == False:
+                pg.draw.rect(screen, (255,0,0), ((x * diff+3)+15, (y * diff+3)+15, diff-7, diff-7))
+                pg.display.flip()
+                pg.time.delay(100)
+                pg.draw.rect(screen, (255,255,255), ((x * diff+3)+15, (y * diff+3)+15, diff-7, diff-7))
+            elif validNum == True:
+                draw_val(val)
+                validNum = False
+            
+            # pg.display.flip()
+            
+            val = 0
+            # pg.time.delay(50)
+            # mouse_clicked = False
+        if checkFinish(solve_number_grid,0,0) == True:
+            res = 1
+        if res == 1:
+            result()
 
     
 
