@@ -5,7 +5,7 @@ pg.init()
 size = (750, 750)  # Width, Height
 screen = pg.display.set_mode(size)
 font = pg.font.SysFont('none', 80)
-font2 = pg.font.SysFont('none', 50)
+font2 = pg.font.SysFont('none', 70)
 pg.display.set_caption("My pygame Window")
 screen.fill((255,255,255))
 
@@ -57,10 +57,10 @@ def get_cord(pos):
 
 def clickBox():  
     draw()
-    print('yeah')
+    # print('yeah')
     # click = pg.mouse.get_pressed()
     if pg.mouse.get_pressed()[0]:  # Check if the left mouse button is pressed
-        print('clicked')
+        # print('clicked')
         print(pg.mouse.get_pos())
         for i in range(2): #(x * diff)+15, (y * diff)+15, diff, diff
             pg.draw.line(screen, (255, 0, 0), ((x * diff - 1) + 15, (y + i) * diff + 15), (x * diff + diff + 1 + 15, (y + i) * diff + 15), 3)
@@ -113,18 +113,19 @@ def draw_val(val):
     # print('the number in this cell is ',number_grid[grid_y][grid_x])
     # print(grid_y,grid_x)
     if number_grid[grid_y][grid_x] == 0:
-        print('this square is empty')
+        # print('this square is empty')
         pg.draw.rect(screen, (255,255,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
 
         text1 = font2.render(str(val), 1, (0, 0, 255))
-        screen.blit(text1, (x * diff+40, y * diff+40))
+        screen.blit(text1, (x * diff+42, y * diff+37))
 
 #function to check if the value works for the sudoky board,
 #so that there is not the same number in the 3x3 square or in the row or column
 def valid(grid, y, x, val):
     x = int(x)
     y = int(y)
-
+    if grid[x][y] == val:
+        return 'duplicate'
     # Check row
     row = grid[x]
     if val in row:
@@ -196,20 +197,39 @@ while run == True:
                 val = 8
             if event.key == pg.K_9:
                 val = 9
+            if event.key == pg.K_BACKSPACE:
+                # Reset number
+                val = 0
+                solve_number_grid[int(y)][int(x)] = 0
+                # Clear input box
+                pg.draw.rect(screen, (255,255,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
             
     
             if val != 0:
                 # get_cord(pg.mouse.get_pos())
                 
-                
-                if valid(solve_number_grid,x,y,val) == True:
+                if valid(solve_number_grid,x,y,val) == 'duplicate':
+                    print('dupe')
+                    validNum = True
+                elif valid(solve_number_grid,x,y,val) == True:
                     solve_number_grid[int(y)][int(x)] = val
+                    pg.draw.rect(screen, (0,0,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
+                    pg.display.flip()
+                    pg.time.delay(100)
+                    pg.draw.rect(screen, (255,255,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
                     validNum = True
                     print('it works')
-                if validNum == True:
+                if validNum == False:
+                    pg.draw.rect(screen, (255,0,0), ((x * diff+3)+15, (y * diff+3)+15, diff-7, diff-7))
+                    pg.display.flip()
+                    pg.time.delay(100)
+                    pg.draw.rect(screen, (255,255,255), ((x * diff+3)+15, (y * diff+3)+15, diff-7, diff-7))
+                elif validNum == True:
                     draw_val(val)
                     validNum = False
+                
                 # pg.display.flip()
+                
                 val = 0
                 # pg.time.delay(50)
                 # mouse_clicked = False
