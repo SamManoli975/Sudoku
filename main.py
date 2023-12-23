@@ -16,25 +16,26 @@ diff = 720 / 9#this is a test change to commitsss
 
 
 number_grid = [
-    [6, 7, 4, 5, 3, 1, 8, 9, 2],
-    [8, 2, 9, 6, 7, 4, 1, 3, 5],
-    [3, 1, 5, 2, 9, 8, 7, 4, 6],
-    [7, 5, 1, 0, 0, 3, 6, 2, 4],
-    [2, 3, 8, 0, 0, 6, 5, 7, 9],
-    [4, 9, 6, 7, 0, 2, 3, 1, 8],
-    [1, 8, 3, 0, 2, 5, 9, 6, 7],
-    [9, 6, 2, 8, 1, 0, 4, 5, 3],
-    [5, 4, 7, 0, 0, 9, 2, 8, 1],
+    [0, 0, 0, 5, 0, 0, 8, 0, 0],
+    [0, 2, 9, 0, 7, 4, 0, 3, 0],
+    [3, 1, 0, 0, 9, 0, 0, 4, 6],
+    [7, 5, 1, 0, 0, 3, 0, 0, 4],
+    [2, 0, 0, 0, 0, 0, 0, 0, 9],
+    [4, 0, 0, 7, 0, 0, 3, 1, 8],
+    [1, 8, 0, 0, 2, 0, 0, 6, 7],
+    [0, 6, 0, 8, 1, 0, 4, 5, 0],
+    [0, 0, 7, 0, 0, 9, 0, 0, 0],
 ]
-    # [0, 0, 0, 5, 0, 0, 8, 0, 0],
-    # [0, 2, 9, 0, 7, 4, 0, 3, 0],
-    # [3, 1, 0, 0, 9, 0, 0, 4, 6],
-    # [7, 5, 1, 0, 0, 3, 0, 0, 4],
-    # [2, 0, 0, 0, 0, 0, 0, 0, 9],
-    # [4, 0, 0, 7, 0, 0, 3, 1, 8],
-    # [1, 8, 0, 0, 2, 0, 0, 6, 7],
-    # [0, 6, 0, 8, 1, 0, 4, 5, 0],
-    # [0, 0, 7, 0, 0, 9, 0, 0, 0],
+    
+#     [0, 0, 4, 5, 3, 1, 8, 9, 2],
+#     [8, 2, 9, 6, 7, 4, 1, 3, 5],
+#     [3, 1, 5, 2, 9, 8, 7, 4, 6],
+#     [7, 5, 1, 0, 0, 3, 6, 2, 4],
+#     [2, 3, 8, 0, 0, 6, 5, 7, 9],
+#     [4, 9, 6, 7, 0, 2, 3, 1, 8],
+#     [1, 8, 3, 0, 2, 5, 9, 6, 7],
+#     [9, 6, 2, 8, 1, 0, 4, 5, 3],
+#     [5, 4, 7, 0, 0, 9, 2, 8, 1],
 
 solve_number_grid = [row[:] for row in number_grid]
 # solve_number_grid = number_grid[:]
@@ -97,6 +98,35 @@ def highlight_box(x, y, mouse_clicked):
             pg.draw.line(screen, (255, 0, 0), ((x * diff - 1) + 15, (y + i) * diff + 15), (x * diff + diff + 1 + 15, (y + i) * diff + 15), 3)
             pg.draw.line(screen, (255, 0, 0), ((x + i) * diff + 15, y * diff + 15), ((x + i) * diff + 15, y * diff + diff + 15), 3)
 
+
+
+#function to solve the sudoku puzzle using backtracking
+# so it will go through the grid and check if the number is valid, if it isnt it will go back and change the number
+# def solve(grid, r, c):
+#     if r == 9:
+#         return True
+#     elif c == 9:
+#         # Move to the next row first, then reset the column index to 0
+#         return solve(grid, r + 1, 0)
+#     elif grid[r][c] != 0:
+#         return solve(grid, r, c + 1)
+#     else:
+#         for k in range(1, 10):
+#             if valid(grid, r, c, k):
+#                 grid[r][c] = k
+#                 draw_val(k, r, c)
+#                 pg.display.flip()
+#                 pg.time.delay(50)
+#                 # Move to the next column within the same row
+#                 return solve(grid, r, c + 1)
+#             else:
+#                 grid[r][c] = 0
+#                 if c == 0:
+#                     return solve(grid, r-1, c)
+#                 else:
+#                     return solve(grid , r ,c-1)
+                
+#         return False
 
 
 #function to check if board is complete
@@ -184,7 +214,7 @@ def draw_numbers():
         row +=1
 
 #function to enter a value
-def draw_val(val):
+def draw_val(val,x,y):
     grid_x = int(x)
     grid_y = int(y)
     # print('these are the grid coords',grid_x,grid_y)
@@ -202,7 +232,7 @@ def draw_val(val):
 
 #function to check if the value works for the sudoky board,
 #so that there is not the same number in the 3x3 square or in the row or column
-def valid(grid, y, x, val):
+def valid(grid, x, y, val):
     x = int(x)
     y = int(y)
     if grid[x][y] == val:
@@ -227,6 +257,48 @@ def valid(grid, y, x, val):
 
     # Return True if the number is valid, False if it isn't
     return True
+
+# def find_empty_cell(board):
+#     for i in range(len(board)):
+#         for j in range(len(board[i])):
+#             if board[i][j] == 0:
+#                 return i, j
+        
+def solve(grid, row, col):
+   
+    
+    if (row == 8 and col == 9):
+        return True
+       
+    
+    if col == 9:
+        row += 1
+        col = 0
+ 
+    
+    if grid[row][col] > 0:
+        return solve(grid, row, col + 1)
+    for num in range(1, 9 + 1, 1):
+       
+        
+        if valid(grid, row, col, num):
+           
+            
+            grid[row][col] = num
+            draw_val(num, col, row)
+            pg.display.flip()
+            pg.time.delay(20)
+ 
+            
+            if solve(grid, row, col + 1):
+                return True
+ 
+
+        grid[row][col] = 0
+        draw_val(num, col, row)
+        pg.display.flip()
+        pg.time.delay(20)
+    return False
 
 
 
@@ -290,15 +362,23 @@ while run == True:
                 solve_number_grid[int(y)][int(x)] = 0
                 # Clear input box
                 pg.draw.rect(screen, (255,255,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
+            if event.key == pg.K_SPACE:
+                val = 0
+                print('space clicked')
+
+                solve(solve_number_grid,0,0)
+                # draw_numbers()
+                pg.display.flip()
+                # print(solve_number_grid)
             
         
         if val != 0:
             # get_cord(pg.mouse.get_pos())
             
-            if valid(solve_number_grid,x,y,val) == 'duplicate':
+            if valid(solve_number_grid,y,x,val) == 'duplicate':
                 print('dupe')
                 validNum = True
-            elif valid(solve_number_grid,x,y,val) == True:
+            elif valid(solve_number_grid,y,x,val) == True:
                 solve_number_grid[int(y)][int(x)] = val
                 pg.draw.rect(screen, (0,0,255), ((x * diff+6)+15, (y * diff+6)+15, diff-13, diff-13))
                 pg.display.flip()
@@ -312,7 +392,7 @@ while run == True:
                 pg.time.delay(100)
                 pg.draw.rect(screen, (255,255,255), ((x * diff+3)+15, (y * diff+3)+15, diff-7, diff-7))
             elif validNum == True:
-                draw_val(val)
+                draw_val(val,x,y)
                 validNum = False
             
             # pg.display.flip()
