@@ -71,6 +71,9 @@ def get_cord(pos):
        global y
        y = (pos[1]-15)//diff
 
+
+#find out the box that the mouse was clicked on and then highlight the box with a red line
+#when a nex box is clicked the draw() function is ran to cover the red lines and reset the lines
 def clickBox(x, y):
     draw()
 
@@ -93,6 +96,7 @@ def clickBox(x, y):
         elif pg.key.get_pressed()[pg.K_DOWN]:
             highlight_box(x, y, False)
 
+#the function to highlight the box with a red line
 def highlight_box(x, y, mouse_clicked):
     if mouse_clicked:
         for i in range(2):
@@ -106,6 +110,8 @@ def highlight_box(x, y, mouse_clicked):
 
 
 
+
+#failed version of backtracking (the coords were the reason it was messing up)
 #function to solve the sudoku puzzle using backtracking
 # so it will go through the grid and check if the number is valid, if it isnt it will go back and change the number
 # def solve(grid, r, c):
@@ -146,33 +152,8 @@ def checkFinish(grid,i,j):
         elif i == 8 and j == 8:
             return True
     return False
-    # pg.event.pump()
-    # for it in range(1, 10):
-    #     if valid(grid, i, j, it)== True:
-    #             grid[i][j]= it
-    #             global x, y
-    #             x = i
-    #             y = j
-    #             # white color background
-    #             screen.fill((255, 255, 255))
-    #             draw()
-    #             clickBox()
-    #             pg.display.update()
-    #             pg.time.delay(20)
-    #             if solve(grid, i, j)== 1:
-    #                 return True
-    #             else:
-    #                 grid[i][j]= 0
-    #             # white color background\
-    #             screen.fill((255, 255, 255))
 
-    #             draw()
-    #             clickBox()
-    #             pg.display.update()
-    #             pg.time.delay(50)
-    # return False
-
-                
+#simple quick function to output congratulations if checkFinish is true
 def result():
     text_congratulations = font.render("CONGRATULATIONS YOU", 1, (0, 0, 255))
 
@@ -190,17 +171,17 @@ def result():
     screen.blit(text_won, (text_won_x, text_won_y))
                 
            
-        # if pos[0] in range(0,80) and pos[1] in range(0,80):
-            
-        #     
-        # elif pos[0] in range(80,160) and pos[1] in range(0,80):
-        #     print("Box 2 clicked")
 
 
 
 
-        
+
+#drawinig the lines of sudoku by calling the function
 draw()
+
+
+
+#function to draw the numbers that are hardcoded into the grid ( you cannot change these numbers)
 def draw_numbers():
     row = 0
     offset = 35
@@ -218,6 +199,7 @@ def draw_numbers():
             
             col +=1
         row +=1
+
 
 #function to enter a value
 def draw_val(val,x,y):
@@ -310,15 +292,15 @@ def solve(grid, row, col):
 
 
 # mouse_clicked = False
-res = 0
-validNum = False
-run = True
+res = 0 #result
+validNum = False # if num is valid
+run = True #ensure the game is running
 while run == True:
     for event in pg.event.get():  
         if event.type == pg.QUIT:
            run = False
            pg.quit()  
-           sys.exit()
+           sys.exit()#quit
         if event.type == pg.MOUSEBUTTONDOWN:
             pos = pg.mouse.get_pos()
             get_cord(pg.mouse.get_pos())
@@ -343,7 +325,7 @@ while run == True:
                 y+= 1
                 clickBox(x,y)
                 
-                
+            #all of the keyboard numbers 
             if event.key == pg.K_1 or event.key == pg.K_KP1:
                 val = 1
             if event.key == pg.K_2 or event.key == pg.K_KP2:
@@ -380,7 +362,8 @@ while run == True:
         
         if val != 0:
             # get_cord(pg.mouse.get_pos())
-            
+
+            #checking if the number is valid or duplicate or not
             if valid(solve_number_grid,y,x,val) == 'duplicate':
                 print('dupe')
                 validNum = True
@@ -415,7 +398,7 @@ while run == True:
 
     
     draw_numbers()#this is the function to draw the numbers he
-    pg.display.flip()
+    pg.display.flip()#update the display or screen
 
 
 
