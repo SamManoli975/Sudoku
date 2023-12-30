@@ -26,7 +26,7 @@ number_grid = [
     [0, 6, 0, 8, 1, 0, 4, 5, 0],
     [0, 0, 7, 0, 0, 9, 0, 0, 0],
 ]
-    
+#debugging with a test grid
 #     [0, 0, 4, 5, 3, 1, 8, 9, 2],
 #     [8, 2, 9, 6, 7, 4, 1, 3, 5],
 #     [3, 1, 5, 2, 9, 8, 7, 4, 6],
@@ -37,9 +37,13 @@ number_grid = [
 #     [9, 6, 2, 8, 1, 0, 4, 5, 3],
 #     [5, 4, 7, 0, 0, 9, 2, 8, 1],
 
+#creating a copy of the grid
 solve_number_grid = [row[:] for row in number_grid]
+
+# testing copying the grid
 # solve_number_grid = number_grid[:]
-# print(solve_number_grid)
+
+#testing 
 # target_number = 9
 # for row_index, row in enumerate(number_grid):
 #     for col_index, number in enumerate(row):
@@ -47,6 +51,8 @@ solve_number_grid = [row[:] for row in number_grid]
 #             print(f"Number {target_number} found at row {row_index + 1}, column {col_index + 1}")
 # print(number_grid[0][5])
 
+
+#functino to draw the lines of the sudoku grid
 def draw():
     
     for i in range(0,10):#looping through from 0-9
@@ -58,7 +64,7 @@ def draw():
         # pg.draw.lines(screen, (255,255,255), False, (80,0),(80,720), 3)
 
 
-
+#function to get the coords of the mouse 
 def get_cord(pos):
        global x
        x = (pos[0]-15)//diff
